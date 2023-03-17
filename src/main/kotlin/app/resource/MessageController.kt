@@ -1,16 +1,16 @@
 package app.resource
 
 import app.model.Message
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import app.service.MessageService
+import org.springframework.web.bind.annotation.*
 
 @RestController
-class MessageController {
+class MessageController(val service: MessageService) {
     @GetMapping("/")
-    fun index() = listOf(
-            Message("1", "Hello!"),
-            Message("2", "Bonjour!"),
-            Message("3", "Privet!"),
-    )
+    fun index(): List<Message> = service.findMessages()
+
+    @PostMapping("/")
+    fun post(@RequestBody message: Message) {
+        service.save(message)
+    }
 }
